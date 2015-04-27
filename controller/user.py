@@ -3,11 +3,12 @@ import json
 from jinja2 import Environment, FileSystemLoader
 from model import User
 
-env = Environment(loader=FileSystemLoader('templates'))
+env = Environment(loader=FileSystemLoader('template'))
 
 
 class RootController:
 
+    @cherrypy.expose
     def index(self, **kw):
         tmpl = env.get_template('index.html')
         return tmpl.render(name='LemonPy')
