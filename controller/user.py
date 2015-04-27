@@ -14,5 +14,6 @@ class UserController(BaseController):
     @cherrypy.expose
     def list_users(self, **kw):
         users = User.get_all_users()
-        usernames = [user.username for user in users]
-        return self._render(tmpl_name=user, usernames=usernames)
+        user_list = [{'username': user.username, 'email': user.email} for user
+                in users]
+        return self._render(tmpl_name='user', users=user_list)

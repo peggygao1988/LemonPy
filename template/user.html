@@ -1,6 +1,6 @@
 <title>{% block title %}{% endblock %}</title>
 <ul>
-{% for username in usernames %}
-  <li>{{ username }}</a></li>
+{% for user in users %}
+<li>{{ user.username}} : {{user.email}}</a></li>
 {% endfor %}
 </ul>
