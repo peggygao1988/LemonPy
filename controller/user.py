@@ -1,20 +1,10 @@
 import cherrypy
-import json
-from jinja2 import Environment, FileSystemLoader
+#import json
+from root import BaseController
 from model import User
 
-env = Environment(loader=FileSystemLoader('template'))
 
-
-class RootController:
-
-    @cherrypy.expose
-    def index(self, **kw):
-        tmpl = env.get_template('index.html')
-        return tmpl.render(name='LemonPy')
-
-
-class UserController:
+class UserController(BaseController):
 
     @cherrypy.expose
     def add_user(self, username, password, gender, email, **kw):
@@ -25,4 +15,4 @@ class UserController:
     def list_users(self, **kw):
         users = User.get_all_users()
         usernames = [user.username for user in users]
-        return json.dumps(usernames)
+        return self._render(tmpl_name=user, usernames=usernames)

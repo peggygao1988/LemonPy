@@ -1,6 +1,7 @@
 import cherrypy
 from uwsgidecorators import postfork
-from controller.user import RootController, UserController
+from controller.root import RootController
+from controller.user import UserController
 
 root = RootController()
 user = UserController()
@@ -8,8 +9,8 @@ root.user = user
 
 config = {
     '/': {
-    'tool.sessions.on': True,
-    'tool.sessions.timeout': 20,  # 20 minutes
+        'tool.sessions.on': True,
+        'tool.sessions.timeout': 20,  # 20 minutes
     }
 }
 
@@ -21,7 +22,6 @@ def close_session():
         lazy initialize db session when requests arrive
         then every process will own a db connection itself
     '''
-    print 'post fork ...'
     from model import session
     session.close()
 
