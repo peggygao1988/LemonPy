@@ -1,3 +1,4 @@
+import cherrypy
 from uwsgidecorators import postfork
 from controller import RootController, UserController
 
@@ -22,6 +23,6 @@ def close_session():
     session.close()
 
 
-
 def application(environ, start_response):
-    pass
+    cherrypy.tree.mount(root,  '/', config=config)
+    return cherrypy.tree(environ, start_response)
