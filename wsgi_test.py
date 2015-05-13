@@ -1,7 +1,16 @@
+import logging
+import logging.config
 import cherrypy
+import yaml
+
 from uwsgidecorators import postfork
 from controller.root import RootController
 from controller.user import UserController
+
+# config logging
+with open('config/log.yml') as log_config:
+    logging.config.dictConfig(yaml.load(log_config))
+
 
 root = RootController()
 user = UserController()

@@ -1,7 +1,8 @@
+import logging
 import cherrypy
 from jinja2 import Environment, FileSystemLoader
 
-
+logger = logging.getLogger('root')
 env = Environment(loader=FileSystemLoader('template'))
 
 
@@ -17,4 +18,5 @@ class RootController(BaseController):
 
     @cherrypy.expose
     def index(self, **kw):
+        logger.info('welcome to lemonpy homepage...')
         return self._render(tmpl_name='index', name='LemonPy')

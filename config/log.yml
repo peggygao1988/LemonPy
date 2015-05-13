@@ -4,6 +4,9 @@ formatters:
         format: '%(asctime)s %(name)-11s %(levelname)-8s %(message)s %(pathname)s %(lineno)s'
         datefmt: '%Y-%m-%d %H:%M:%S'
         class: logging.Formatter
+    http:
+        format: '%(asctime)s %(message)s'
+        class: logging.Formatter
 
 handlers:
     file_handler:
@@ -11,18 +14,37 @@ handlers:
         formatter: default
         filename: /var/log/lemon.log
         backupCount: 3
-        maxBytes: 1024
+        maxBytes: 524288000
 
     console_handler:
         class: logging.StreamHandler
         formatter: default
         stream: ext://sys.stdout
-
+    access_handler:
+        class: logging.handlers.RotatingFileHandler
+        formatter: http
+        filename: /var/log/lemon-access.log
+        backupCount: 5
+        maxBytes: 524288000 # 500M
+    error_handler:
+        class: logging.handlers.RotatingFileHandler
+        formatter: http
+        filename: /var/log/lemon-error.log
+        backupCount: 5
+        maxBytes: 524288000 # 500M
 loggers:
     console:
         level: DEBUG
         handlers: [console_handler]
         propagate: yes
+    access:
+        level: INFO
+        handlers: [access_handler]
+        propagate: no
+    error:
+        level: ERROR
+        handlers: [error_handler]
+        propagate: no
 root:
     level: WARNING
     handlers: [file_handler]
