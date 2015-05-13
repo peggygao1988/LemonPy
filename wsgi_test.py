@@ -36,5 +36,15 @@ def close_session():
 
 
 def application(environ, start_response):
+    print 'environ :', environ
     cherrypy.tree.mount(root,  '/', config=config)
-    return cherrypy.tree(environ, start_response)
+    print 'url :', cherrypy.url()
+    request = cherrypy.request
+    print 'headers :', request.headers
+    print 'query_string', request.query_string
+    print 'remote :', request.remote
+    print 'base :', request.base
+    print 'script_name :', request.script_name
+    reponse = cherrypy.tree(environ, start_response)
+    print 'reponse :', reponse
+    return reponse
