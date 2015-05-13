@@ -5,11 +5,12 @@ formatters:
         datefmt: '%Y-%m-%d %H:%M:%S'
         class: logging.Formatter
 
-handlesr:
+handlers:
     file_handler:
         class: logging.handlers.RotatingFileHandler
         formatter: default
-        category: ext://logging.LOG_CATEGORY
+        filename: /var/log/lemon.log
+        backupCount: 3
         maxBytes: 1024
 
     console_handler:
@@ -21,6 +22,7 @@ loggers:
     console:
         level: DEBUG
         handlers: [console_handler]
+        propagate: yes
 root:
-        level: WARNING
-        handlers: [file_handler]
+    level: WARNING
+    handlers: [file_handler]
