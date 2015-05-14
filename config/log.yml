@@ -7,7 +7,10 @@ formatters:
     http:
         format: '%(asctime)s %(message)s'
         class: logging.Formatter
-
+filters:
+    root_filter:
+        class: logging.Filter
+        name: root
 handlers:
     file_handler:
         class: logging.handlers.RotatingFileHandler
@@ -15,7 +18,7 @@ handlers:
         filename: /var/log/lemon.log
         backupCount: 3
         maxBytes: 524288000
-
+        filters: [root_filter]
     console_handler:
         class: logging.StreamHandler
         formatter: default
@@ -36,7 +39,7 @@ loggers:
     console:
         level: DEBUG
         handlers: [console_handler]
-        propagate: yes
+        propagate: no
     access:
         level: INFO
         handlers: [access_handler]
@@ -48,3 +51,4 @@ loggers:
 root:
     level: INFO
     handlers: [file_handler]
+#    filters: [root_filter]

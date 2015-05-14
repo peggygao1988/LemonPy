@@ -8,9 +8,8 @@ from controller.root import RootController
 from controller.user import UserController
 
 # config logging
-with open('config/log.yml') as log_config:
-    logging.config.dictConfig(yaml.load(log_config))
-
+#with open('config/log.yml') as log_config:
+#    logging.config.dictConfig(yaml.load(log_config))
 
 root = RootController()
 user = UserController()
@@ -41,10 +40,14 @@ def application(environ, start_response):
     print 'url :', cherrypy.url()
     request = cherrypy.request
     print 'headers :', request.headers
+    print 'header_list :', request.header_list
     print 'query_string', request.query_string
     print 'remote :', request.remote
     print 'base :', request.base
     print 'script_name :', request.script_name
-    reponse = cherrypy.tree(environ, start_response)
-    print 'reponse :', reponse
-    return reponse
+    response = cherrypy.tree(environ, start_response)
+    print 'response :', response
+    print dir(response)
+    print response.environ
+    print response.response
+    return response
