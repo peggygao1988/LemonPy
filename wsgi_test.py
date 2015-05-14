@@ -1,3 +1,4 @@
+import time
 import logging
 import logging.config
 import cherrypy
@@ -8,9 +9,9 @@ from controller.root import RootController
 from controller.user import UserController
 
 # config logging
-#with open('config/log.yml') as log_config:
+# with open('config/log.yml') as log_config:
 #    logging.config.dictConfig(yaml.load(log_config))
-
+error_logger = logging.getLogger('error')
 root = RootController()
 user = UserController()
 root.user = user
@@ -34,20 +35,27 @@ def close_session():
     session.close()
 
 
+def _on_internal_error(env):
+    tb = cherrypy._cperror.format_exc()
+    url = env['PATH_INFO'] + env['QUERY_STRING']
+    ip = env['REMOTE_ADDR']
+    message = '"{}" "{}" "{}"'.format(ip, url, tb)
+    error_logger.error(message)
+    cherrypy.HTTPError(500).set_response()
+    cherrypy.response.finalize()
+    response = cherrypy._cprequest.Response()
+    response.status = "500 server internal error"
+    response.header_list = [('Content-Type', 'text/plain'), ('Content-Length', '25')]
+    response.body = "Oooooops, Server Internal Error"
+    return response
+
+
 def application(environ, start_response):
-    print 'environ :', environ
     cherrypy.tree.mount(root,  '/', config=config)
-    print 'url :', cherrypy.url()
-    request = cherrypy.request
-    print 'headers :', request.headers
-    print 'header_list :', request.header_list
-    print 'query_string', request.query_string
-    print 'remote :', request.remote
-    print 'base :', request.base
-    print 'script_name :', request.script_name
-    response = cherrypy.tree(environ, start_response)
-    print 'response :', response
-    print dir(response)
-    print response.environ
-    print response.response
+    try:
+        response = cherrypy.tree(environ, start_response)
+
+    except Exception, e:
+        response = _on_internal_error(environ)
+
     return response

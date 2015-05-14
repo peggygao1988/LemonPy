@@ -20,5 +20,5 @@ class RootController(BaseController):
     @cherrypy.expose
     def index(self, **kw):
         logger.info('welcome to lemonpy homepage...')
-        print 'welcom to lemonpy homepage print...'
+        raise KeyError('error for test')
         return self._render(tmpl_name='index', name='LemonPy')

@@ -4,7 +4,10 @@ formatters:
         format: '%(asctime)s %(name)-11s %(levelname)-8s %(message)s %(pathname)s %(lineno)s'
         datefmt: '%Y-%m-%d %H:%M:%S'
         class: logging.Formatter
-    http:
+    access:
+        format: '%(message)s'
+        class: logging.Formatter
+    http_error:
         format: '%(asctime)s %(message)s'
         class: logging.Formatter
 filters:
@@ -31,7 +34,7 @@ handlers:
         maxBytes: 524288000 # 500M
     error_handler:
         class: logging.handlers.RotatingFileHandler
-        formatter: http
+        formatter: http_error
         filename: /var/log/lemon-error.log
         backupCount: 5
         maxBytes: 524288000 # 500M
@@ -40,7 +43,7 @@ loggers:
         level: DEBUG
         handlers: [console_handler]
         propagate: no
-    access:
+    cherrypy.access:
         level: INFO
         handlers: [access_handler]
         propagate: no
