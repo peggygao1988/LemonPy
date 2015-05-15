@@ -1,8 +1,9 @@
 from elixir import metadata, Entity, Field
 from elixir import Unicode, UnicodeText, Integer
 from elixir import setup_all, session
+from config import *
 
-metadata.bind = 'mysql://root:123456@localhost/test'
+metadata.bind = TEST_MYSQL_STR
 #metadata.bind.echo = True
 
 
@@ -27,6 +28,11 @@ class User(Entity):
     @classmethod
     def get_all_users(cls):
         users = cls.query.filter_by().all()
+        return users
+
+    @classmethod
+    def search_user_by_username(cls, key):
+        users = cls.query.filter(User.username.like('%%key%%')).all()
         return users
 
 
