@@ -4,7 +4,7 @@ from elixir import setup_all, session
 from config import *
 
 metadata.bind = TEST_MYSQL_STR
-#metadata.bind.echo = True
+metadata.bind.echo = True
 
 
 class User(Entity):
@@ -32,7 +32,7 @@ class User(Entity):
 
     @classmethod
     def search_user_by_username(cls, key):
-        users = cls.query.filter(User.username.like('%%key%%')).all()
+        users = cls.query.filter(User.username.like('%{}%'.format(key))).all()
         return users
 
 
