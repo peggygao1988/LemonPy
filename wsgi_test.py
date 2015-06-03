@@ -1,12 +1,11 @@
-import time
 import logging
 import logging.config
 import cherrypy
-import yaml
 
 from uwsgidecorators import postfork
 from controller.root import RootController
 from controller.user import UserController
+from model import session
 
 
 error_logger = logging.getLogger('error')
@@ -14,9 +13,11 @@ root = RootController()
 user = UserController()
 root.user = user
 
+
 def handle_error():
     cherrypy.response.status = 500
-    cherrypy.response.body = ["<html><body>Sorry, an error occured</body></html>"]
+    cherrypy.response.body = [
+        "<html><body>Sorry, an error occured</body></html>"]
 
 config = {
     '/': {
@@ -42,4 +43,5 @@ def close_session():
 def application(environ, start_response):
     cherrypy.tree.mount(root,  '/', config=config)
     response = cherrypy.tree(environ, start_response)
+    session.close()
     return response
