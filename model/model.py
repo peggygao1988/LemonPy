@@ -1,9 +1,11 @@
 from elixir import metadata, Entity, Field
 from elixir import Unicode, UnicodeText, Integer
 from elixir import setup_all, session
+from sqlalchemy import create_engine, pool
 from config import *
 
-metadata.bind = TEST_MYSQL_STR
+metadata.bind = create_engine(
+    TEST_MYSQL_STR, pool_recycle=3600, pool_size=50, poolclass=pool.SingletonThreadPool)
 metadata.bind.echo = True
 
 
